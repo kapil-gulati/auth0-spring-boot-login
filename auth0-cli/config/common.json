@@ -1,0 +1,32 @@
+{
+  "AUTH0_EXCLUDED": [
+    "actions",
+    "branding",
+    "clientGrants",
+    "clients",
+    "customDomains",
+    "databases",
+    "emailTemplates",
+    "guardianFactors",
+    "guardianFactorTemplates",
+    "hooks",
+    "migrations",
+    "pages",
+    "prompts",
+    "resourceServers",
+    "roles",
+    "rules",
+    "rulesConfigs",
+    "triggers"
+  ],
+  "AUTH0_ALLOW_DELETE": false,
+  "EXCLUDED_PROPS": {
+    "clients": [
+      "client_secret"
+    ],
+    "connections": [
+      "options.client_secret"
+    ]
+  }
+}
+   

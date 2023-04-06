@@ -1,0 +1,33 @@
+{
+  "name": "auth0-cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "auth0-deploy-cli": "^7.17.1"
+  },
+  "scripts": {
+    "export:dev": "a0deploy export --strip --format yaml --output_folder ./out --config_file ./config/dev.json",
+    "import:dev": "a0deploy import --input_file tenant.yaml --config_file ./config/dev.json",
+    "export:d": "node export.js",
+    "import:d": "node import.js",
+    "lint": "eslint ./actions ./rules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abbott-Bluebird/bluebird-cloud-infra-auth0.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abbott-Bluebird/bluebird-cloud-infra-auth0/issues"
+  },
+  "homepage": "https://github.com/Abbott-Bluebird/bluebird-cloud-infra-auth0#readme",
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.4"
+  }
+}

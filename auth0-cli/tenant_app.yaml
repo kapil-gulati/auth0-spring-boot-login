@@ -1,0 +1,273 @@
+rules:
+  - name: disableMultifactorForSpecificUsers
+    script: ./rules/disableMultifactorForSpecificUsers.js
+    stage: login_success
+    enabled: true
+    order: 1
+rulesConfigs: []
+hooks: []
+pages:
+  - name: login
+    enabled: false
+    html: ./pages/login.html
+resourceServers:
+  - name: SpringBoot Server API
+    identifier: https://cms-d.hellolingo.com/authorization
+    allow_offline_access: true
+    enforce_policies: false
+    scopes:
+      - value: create:refund
+        description: Users with this permissions can create a refund
+    signing_alg: RS256
+    skip_consent_for_verifiable_first_party_clients: true
+    token_dialect: access_token
+    token_lifetime: 2592000
+    token_lifetime_for_web: 7200
+clients:
+  - name: auth0-deploy-cli
+    app_type: non_interactive
+    cross_origin_auth: false
+    custom_login_page_on: true
+    grant_types:
+      - client_credentials
+    is_first_party: true
+    is_token_endpoint_ip_header_trusted: false
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    oidc_conformant: true
+    refresh_token:
+      expiration_type: non-expiring
+      leeway: 0
+      infinite_token_lifetime: true
+      infinite_idle_token_lifetime: true
+      token_lifetime: 31557600
+      idle_token_lifetime: 2592000
+      rotation_type: non-rotating
+    sso_disabled: false
+    token_endpoint_auth_method: client_secret_post
+databases:
+  - name: Username-Password-Authentication
+    strategy: auth0
+    enabled_clients: []
+    is_domain_connection: false
+    options:
+      mfa:
+        active: true
+        return_enroll_settings: true
+      passwordPolicy: good
+      strategy_version: 2
+      brute_force_protection: true
+    realms:
+      - Username-Password-Authentication
+emailTemplates:
+  # - template: verify_email
+  #   body: ./emailTemplates/verify_email.html
+  #   enabled: true
+  #   from: noreply@hellolingo.com
+  #   resultUrl: '{{ application.callback_domain }}'
+  #   subject: Verification Email
+  #   syntax: liquid
+  #   urlLifetimeInSeconds: 432000
+clientGrants: []
+guardianFactors:
+  - name: duo
+    enabled: false
+  - name: email
+    enabled: false
+  - name: otp
+    enabled: false
+  - name: push-notification
+    enabled: false
+  - name: recovery-code
+    enabled: false
+  - name: sms
+    enabled: true
+  - name: webauthn-platform
+    enabled: true
+  - name: webauthn-roaming
+    enabled: false
+guardianFactorTemplates: []
+guardianPolicies:
+  policies:
+    - all-applications
+guardianPhoneFactorSelectedProvider:
+  provider: twilio
+guardianPhoneFactorMessageTypes:
+  message_types:
+    - sms
+roles:
+  - name: CSR
+    description: CSR
+    permissions:
+      - permission_name: create:refund
+        resource_server_identifier: https://cms-d.hellolingo.com/authorization
+branding:
+  colors:
+    page_background: '#000000'
+    primary: '#144E66'
+  logo_url: https://dam.abbott.com/global/logos/logo.png
+  templates: []
+prompts:
+  customText:
+    en:
+      login:
+        login:
+          description: >-
+            Enter your e-mail to continue. If you bought your biosensor on the
+            website, use the same e-mail address you used at the time of
+            purchase.
+      login-id:
+        login-id:
+          description: >-
+            Enter your e-mail to continue. If you bought your biosensor on the
+            website, use the same e-mail address you used at the time of
+            purchase.
+      login-password:
+        login-password:
+          description: Set your password to continue.
+      signup-id:
+        signup-id:
+          description: >-
+            Enter your e-mail to continue. If you bought your biosensor on the
+            website, use the same e-mail address you used at the time of
+            purchase.
+      signup-password:
+        signup-password:
+          description: Set your password to continue.
+      mfa-phone:
+        mfa-phone-enrollment:
+          description: >-
+            Enter your phone number here. We’ll send you a text message to
+            verify your account.
+      mfa-webauthn:
+        mfa-webauthn-enrollment-success:
+          descriptionPlatform: You are registered and ready to move on.
+          titlePlatform: 'Success! '
+        mfa-webauthn-platform-challenge:
+          title: Use fingerprint or face recognition to login
+        mfa-webauthn-platform-enrollment:
+          description: >-
+            Set up fingerprint or face recognition now for secure and fast log
+            in.
+          title: Log In Faster
+          pageTitle: Log In Faster
+      mfa-sms:
+        mfa-country-codes:
+          pageTitle: Select your country code
+        mfa-sms-challenge:
+          description: Check your messages for a 6-digit code.
+        mfa-sms-enrollment:
+          description: >-
+            Enter your phone number here. We’ll send you a text message to
+            verify your account.
+      mfa-recovery-code:
+        mfa-recovery-code-challenge:
+          title: 'Verify Your Account '
+          description: Check your messages for a 6-digit code.
+      mfa:
+        mfa-enroll-result:
+          enrolledDescription: You are registered and ready to move on.
+          enrolledTitle: 'Success! '
+  identifier_first: true
+  universal_login_experience: new
+  webauthn_platform_first_factor: true
+migrations:
+  role_users_offset_pagination_over_thousand: false
+actions: []
+organizations: []
+attackProtection:
+  breachedPasswordDetection:
+    enabled: false
+    shields: []
+    admin_notification_frequency: []
+    method: standard
+    stage:
+      pre-user-registration:
+        shields: []
+  bruteForceProtection:
+    enabled: true
+    shields:
+      - block
+      - user_notification
+    mode: count_per_identifier_and_ip
+    allowlist: []
+    max_attempts: 10
+  suspiciousIpThrottling:
+    enabled: true
+    shields:
+      - admin_notification
+      - block
+    allowlist: []
+    stage:
+      pre-login:
+        max_attempts: 100
+        rate: 864000
+      pre-user-registration:
+        max_attempts: 50
+        rate: 1200
+themes:
+  - borders:
+      button_border_weight: 1
+      buttons_style: pill
+      button_border_radius: 5
+      input_border_weight: 1
+      inputs_style: sharp
+      input_border_radius: 5
+      widget_corner_radius: 22
+      widget_border_weight: 0
+      show_widget_shadow: true
+    colors:
+      primary_button: '#1e1c1c'
+      primary_button_label: '#ffffff'
+      secondary_button_border: '#1e1c1c'
+      secondary_button_label: '#000000'
+      base_focus_color: '#1e1c1c'
+      base_hover_color: '#636363'
+      links_focused_components: '#1e1c1c'
+      header: '#1e212a'
+      body_text: '#1e212a'
+      widget_background: '#f5f5f2'
+      widget_border: '#c9cace'
+      input_labels_placeholders: '#a4a2a2'
+      input_filled_text: '#000000'
+      input_border: '#cfcfcf'
+      input_background: '#ffffff'
+      icons: '#65676e'
+      error: '#e6032e'
+      success: '#009e3b'
+    displayName: Unnamed Theme
+    fonts:
+      font_url: >-
+        https://github.com/stevenmiller888/matter/blob/master/lib/typography/san-francisco-display/sanfranciscodisplay-regular-webfont.woff2
+      reference_text_size: 16
+      title:
+        bold: false
+        size: 150
+      subtitle:
+        bold: false
+        size: 87.5
+      body_text:
+        bold: false
+        size: 87.5
+      buttons_text:
+        bold: false
+        size: 100
+      input_labels:
+        bold: false
+        size: 100
+      links:
+        bold: true
+        size: 87.5
+      links_style: normal
+    page_background:
+      page_layout: center
+      background_color: '#e5e5e5'
+      background_image_url: ''
+    widget:
+      logo_position: center
+      logo_url: https://dam.abbott.com/global/logos/logo.png
+      logo_height: 45
+      header_text_alignment: center
+      social_buttons_layout: bottom
